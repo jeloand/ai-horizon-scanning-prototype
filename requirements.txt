@@ -1,27 +1,30 @@
 # ───────────────────────── Core data / HTTP ─────────────────────────
-pandas>=2.2         # fast CSV / Parquet handling
-feedparser>=6.0     # robust RSS parsing
-httpx[http2]>=0.28  # async HTTP client
-tenacity>=8.2       # retry/back-off wrappers
-pydantic>=2.9       # required by httpx for strict types
+pandas>=2.2
+feedparser>=6.0
+httpx[http2]>=0.28
+tenacity>=8.2
 
 # ───────────────────────── NLP / ML ─────────────────────────
-scikit-learn>=1.4               # TF-IDF + misc utilities
-transformers>=4.41              # HuggingFace models / pipelines
-sentence-transformers>=2.7      # MiniLM embedding helper
-torch>=2.2.0+cpu ; platform_system!="Linux" or platform_machine=="x86_64"
-torch>=2.2.0      ; platform_system=="Linux" and platform_machine!="x86_64"
-# ↑ Use the CPU wheel by default; replace with +cu118 etc. if you have CUDA
+scikit-learn>=1.4
+transformers>=4.41
+sentence-transformers>=2.7        # pulls in huggingface-hub etc.
+
+# PyTorch wheels (CPU only – swap for +cu118/+cu121 if you have CUDA)
+torch==2.2.0+cpu      ; platform_system!="Linux" or platform_machine=="x86_64"
+torch==2.2.0          ; platform_system=="Linux"   and platform_machine!="x86_64"
 
 # ───────────────────────── Vector store ─────────────────────────
-faiss-cpu>=1.7      # fast similarity search (CPU)
+faiss-cpu>=1.7
 
 # ───────────────────────── LLM client ─────────────────────────
-openai>=1.25        # chat completions for GPT-4o (or drop-in compatible key)
+openai>=1.25          # GPT-4o via Chat Completions
 
-# ───────────────────────── Utility ─────────────────────────
-python-dotenv>=1.0  # load .env secrets
-pyyaml>=6.0         # external YAML config files
-tqdm>=4.66          # progress bars during embedding
-tabulate>=0.9       # pretty tables in test_query.py
-rich>=13.7          # colourful logging / optional CLI niceties
+# ───────────────────────── Utility / CLI ─────────────────────────
+python-dotenv>=1.0    # load .env secrets if you use them
+pyyaml>=6.0
+tqdm>=4.66
+tabulate>=0.9
+rich>=13.7            # colourful logs (optional but nice)
+
+# ───────────────────────── Optional local cache helper ─────────────────────────
+diskcache>=5.6        # only if you decide to swap in a heavier cache lib
