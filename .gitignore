@@ -1,0 +1,12 @@
+# Secrets / config
+.env
+
+# Large runtime artifacts
+*.faiss
+*.parquet
+horizon_scanning_combined.csv
+
+# Python byte-code & caches
+__pycache__/
+*.pyc
+*.pyo
