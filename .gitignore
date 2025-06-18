@@ -1,12 +1,27 @@
-# Secrets / config
+# ────────────────── secrets / user-specific config ──────────────────
 .env
+config*.json          # e.g. config2.json with your API keys
 
-# Large runtime artifacts
+# ────────────────── large runtime artefacts ─────────────────────────
 *.faiss
 *.parquet
 horizon_scanning_combined.csv
+.cache/               # on-disk memoisation files
+*.pkl                 # any pickled models
 
-# Python byte-code & caches
+# ────────────────── Python byte-code & build trash ───────────────────
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
+*.so                  # C-extensions if you ever compile one
+*.egg-info/
+dist/
+build/
+
+# ────────────────── notebooks / editors / OS cruft (optional) ───────
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
