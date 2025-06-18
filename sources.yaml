@@ -1,0 +1,52 @@
+ # ECB Feeds
+ECB – Press: "https://www.ecb.europa.eu/rss/press.html"
+ECB – Blog: "https://www.ecb.europa.eu/rss/blog.html"
+ECB – Statistics: "https://www.ecb.europa.eu/rss/statpress.html"
+ECB – Publications: "https://www.ecb.europa.eu/rss/pub.html"
+ECB – Working Papers: "https://www.ecb.europa.eu/rss/wppub.html"
+ECB – Market Operations: "https://www.ecb.europa.eu/rss/operations.html"
+ECB – Procurement: "https://www.ecb.europa.eu/rss/procurements.html"
+ECB – Yield Curve: "https://www.ecb.europa.eu/rss/yc.html"
+ECB – Research Bulletin: "https://www.ecb.europa.eu/rss/rbu.html"
+
+# New York Times Feeds
+NYT – World: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+NYT – Europe: "https://rss.nytimes.com/services/xml/rss/nyt/Europe.xml"
+NYT – US: "https://rss.nytimes.com/services/xml/rss/nyt/US.xml"
+NYT – Education: "https://rss.nytimes.com/services/xml/rss/nyt/Education.xml"
+NYT – Politics: "https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml"
+NYT – Business: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml"
+NYT – Energy & Environment: "https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml"
+NYT – Economy: "https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml"
+NYT – Technology: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml"
+NYT – Jobs: "https://rss.nytimes.com/services/xml/rss/nyt/Jobs.xml"
+
+# Eurostat / European Commission
+Eurostat – Population & Society: "https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_POPSOC&_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL"
+Eurostat – Economy & Finance: "https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_ECOFIN&_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL"
+Eurostat – Industry & Commerce: "https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_INDCOM&_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL"
+Eurostat – R&D: "https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_RESDEV&_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL"
+Eurostat – R&D Datasets: "https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_RESDEV&_estatsearchportlet_WAR_estatsearchportlet_collection=dataset"
+
+# European Parliament
+EP – Newsletters: "https://www.europarl.europa.eu/rss/doc/newsletters/en.xml"
+EP – Press Releases (Committees): "https://www.europarl.europa.eu/rss/doc/press-releases-committees/en.xml"
+EP – Top Stories: "https://www.europarl.europa.eu/rss/doc/top-stories/en.xml"
+
+# DG Internal Market, Industry, SMEs
+EC DG GROW – Industry: "https://single-market-economy.ec.europa.eu/node/3/rss_en"
+EC DG GROW – Entrepreneurship: "https://single-market-economy.ec.europa.eu/node/2046/rss_en"
+EC DG GROW – SME Policy: "https://single-market-economy.ec.europa.eu/node/4/rss_en"
+EC DG GROW – Newsroom: "https://ec.europa.eu/newsroom/growth/feed?tpa_id=29399"
+
+# European Council / Consilium
+Consilium – EPSCO Meetings: "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=epsco"
+Consilium – EYCS Meetings: "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=eycs"
+Consilium – COMPET Meetings: "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=compet"
+Consilium – ECOFIN Meetings: "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=ecofin"
+Consilium – EPSCO Working Party: "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=wp-epsco"
+Consilium – Public Register LD: "https://www.consilium.europa.eu/en/register/rss/LD.xml"
+Consilium – Public Register ACT: "https://www.consilium.europa.eu/en/register/rss/ACT.xml"
+
+# Journal of European Social Policy
+JESP – Journal RSS: "https://journals.sagepub.com/action/showFeed?ui=0&mi=ehikzz&ai=2b4&jc=esp&type=etoc&feed=rss"
