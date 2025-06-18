@@ -1,0 +1,27 @@
+# ───────────────────────── Core data / HTTP ─────────────────────────
+pandas>=2.2         # fast CSV / Parquet handling
+feedparser>=6.0     # robust RSS parsing
+httpx[http2]>=0.28  # async HTTP client
+tenacity>=8.2       # retry/back-off wrappers
+pydantic>=2.9       # required by httpx for strict types
+
+# ───────────────────────── NLP / ML ─────────────────────────
+scikit-learn>=1.4               # TF-IDF + misc utilities
+transformers>=4.41              # HuggingFace models / pipelines
+sentence-transformers>=2.7      # MiniLM embedding helper
+torch>=2.2.0+cpu ; platform_system!="Linux" or platform_machine=="x86_64"
+torch>=2.2.0      ; platform_system=="Linux" and platform_machine!="x86_64"
+# ↑ Use the CPU wheel by default; replace with +cu118 etc. if you have CUDA
+
+# ───────────────────────── Vector store ─────────────────────────
+faiss-cpu>=1.7      # fast similarity search (CPU)
+
+# ───────────────────────── LLM client ─────────────────────────
+openai>=1.25        # chat completions for GPT-4o (or drop-in compatible key)
+
+# ───────────────────────── Utility ─────────────────────────
+python-dotenv>=1.0  # load .env secrets
+pyyaml>=6.0         # external YAML config files
+tqdm>=4.66          # progress bars during embedding
+tabulate>=0.9       # pretty tables in test_query.py
+rich>=13.7          # colourful logging / optional CLI niceties
