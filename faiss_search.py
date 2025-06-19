@@ -1,13 +1,15 @@
 # faiss_search.py
 import faiss, pandas as pd, numpy as np
 from sentence_transformers import SentenceTransformer
+from pathlib import Path
 
-INDEX_PATH = "horizon_scanning.faiss"
-META_PATH  = "horizon_scanning_meta.parquet"
+BASE_DIR = Path(__file__).resolve().parent
+INDEX_PATH = BASE_DIR / "horizon_scanning.faiss"
+META_PATH  = BASE_DIR / "horizon_scanning_meta.parquet"
 EMBED_MODEL_NAME = "all-MiniLM-L6-v2"          # must match the scraper
 
 # --- load once at import ----------------------------------------
-index = faiss.read_index(INDEX_PATH)
+index = faiss.read_index(str(INDEX_PATH))
 meta  = pd.read_parquet(META_PATH).set_index("id")   # id column = index
 embed = SentenceTransformer(EMBED_MODEL_NAME)
 

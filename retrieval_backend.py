@@ -5,14 +5,15 @@ import json
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
-_VECTORS = "horizon_scanning.faiss"
-_META    = "horizon_scanning_meta.parquet"
+BASE_DIR = Path(__file__).resolve().parent
+_VECTORS = BASE_DIR / "horizon_scanning.faiss"
+_META    = BASE_DIR / "horizon_scanning_meta.parquet"
 _EMBED_MODEL = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
 
 def ready() -> bool:
-    return (Path(_VECTORS).exists() and Path(_META).exists())
+    return (_VECTORS.exists() and _META.exists())
 
-index = faiss.read_index(_VECTORS) if ready() else None
+index = faiss.read_index(str(_VECTORS)) if ready() else None
 meta  = (pd.read_parquet(_META)
          .set_index("id")            # id column we added in STEP 9b
          if ready() else None)
