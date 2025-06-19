@@ -140,17 +140,20 @@ logging.info("Fetching RSS + Scopus + OpenAIRE asynchronously …")
 rss_df, scopus_df, openaire_df = asyncio.run(gather_sources())
 logging.info("All async sources fetched.")
 
-# ========== STEP 3b: Load CORDIS Projects from JSON ==========
+# ========== STEP 3b: Load CORDIS projects from JSON ==========
 
-def load_cordis_projects(filepath="cordis-h2020projects.json", max_results=20):
-    logging.info("Loading CORDIS Horizon 2020 projects …")
+from pathlib import Path   # already imported earlier, but keep if not
 
-    try:
-        with open(filepath, encoding="utf-8") as f:
-            data = json.load(f)
-    except FileNotFoundError:
-        logging.warning("CORDIS dataset %s not found; skipping.", filepath)
-        return pd.DataFrame()
+def load_cordis_projects(filepath: str = "cordis-h2020projects.json",
+                         max_results: int = 20) -> pd.DataFrame:
+    """Load a small sample of Horizon-2020 projects (local JSON)."""
+    if not Path(filepath).exists():
+        logging.warning("CORDIS file %s not found – skipping that source.", filepath)
+        return pd.DataFrame()               # empty → downstream code still works
+
+    logging.info("Loading CORDIS Horizon-2020 projects …")
+    with open(filepath, encoding="utf-8") as f:
+        data = json.load(f)
 
     selected = []
     for rec in data:
@@ -158,34 +161,21 @@ def load_cordis_projects(filepath="cordis-h2020projects.json", max_results=20):
         objective = rec.get("objective", "")
         if not title and not objective:
             continue
-        selected.append(
-            {
-                "title": title.strip(),
-                "description": objective.strip(),
-                "link": f"https://cordis.europa.eu/project/id/{rec.get('rcn', '')}",
-                "published": rec.get("startDate", ""),  # <‑‑ BUG‑FIX #1 (fallback)
-                "source_name": "CORDIS – H2020 Projects",
-            }
-        )
+        selected.append({
+            "title":       title.strip(),
+            "description": objective.strip(),
+            "link":        f"https://cordis.europa.eu/project/id/{rec.get('rcn', '')}",
+            "published":   rec.get("startDate", ""),   # fallback date
+            "source_name": "CORDIS – H2020 Projects",
+        })
         if len(selected) >= max_results:
             break
+
     logging.info("Retrieved %d CORDIS entries", len(selected))
     return pd.DataFrame(selected)
 
-
+# call it
 cordis_df = load_cordis_projects()
-
-# ========== STEP 4: Combine & de-duplicate ==========
-df = pd.concat([rss_df, scopus_df, openaire_df, cordis_df], ignore_index=True)
-
-# 1️⃣ drop rows that share the exact same link before any expensive NLP work
-df = df.drop_duplicates(subset="link", keep="first")
-
-# 2️⃣ optional: drop rows that have no published date
-df = df.dropna(subset=["published"])
-
-logging.info("Articles per source after de-dup + date filter:\n%s",
-             df["source_name"].value_counts())
 
 # ---------- Fill missing published dates from URL slug ----------
 
