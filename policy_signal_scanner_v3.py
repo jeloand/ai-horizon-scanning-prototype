@@ -145,8 +145,12 @@ logging.info("All async sources fetched.")
 def load_cordis_projects(filepath="cordis-h2020projects.json", max_results=20):
     logging.info("Loading CORDIS Horizon 2020 projects …")
 
-    with open(filepath, encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open(filepath, encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        logging.warning("CORDIS dataset %s not found; skipping.", filepath)
+        return pd.DataFrame()
 
     selected = []
     for rec in data:
