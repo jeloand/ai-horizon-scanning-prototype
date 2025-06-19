@@ -140,7 +140,7 @@ logging.info("Fetching RSS + Scopus + OpenAIRE asynchronously …")
 rss_df, scopus_df, openaire_df = asyncio.run(gather_sources())
 logging.info("All async sources fetched.")
 
-# ========== STEP 3b: Load CORDIS projects from JSON ==========
+# ========== STEP 3: Load CORDIS projects from JSON ==========
 
 from pathlib import Path   # already imported earlier, but keep if not
 
@@ -194,7 +194,7 @@ def infer_date(row):
 
 df["published"] = df.apply(infer_date, axis=1)
 
-# ========== STEP 4b: Recency labels ==========
+# ========== STEP 4: Recency labels ==========
 
 def assign_recency_label(pub_date_str: str) -> str:
     try:
