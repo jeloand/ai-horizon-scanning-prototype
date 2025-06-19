@@ -36,7 +36,7 @@ stores semantic embeddings, and answers policy questions with an LLM**
 ├── requirements.txt
 └── .gitignore
 
-````
+```
 
 > **Large runtime artefacts** (`*.faiss`, `*.parquet`, `horizon_scanning_combined.csv`) are ignored by Git via `.gitignore`.
 
@@ -53,7 +53,7 @@ cd horizon-scanning-agent
 pip install -r requirements.txt
 
 # 3. add your secrets
-cp .env.example .env            # then edit
+# create a .env file with
 #   OPENAI_API_KEY=...
 #   SCOPUS_API_KEY=...(optional)
 
@@ -62,7 +62,7 @@ python policy_signal_scanner_v3.py
 
 # 5. chat with the agent
 python agent_app.py
-````
+```
 
 ---
 
@@ -103,5 +103,4 @@ MIT – see `LICENSE`.
 
 Dal Borgo R. (2025) Horizon-Scanning Agent, v0.1.*
 
-```
 ```
