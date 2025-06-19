@@ -177,6 +177,12 @@ def load_cordis_projects(filepath: str = "cordis-h2020projects.json",
 # call it
 cordis_df = load_cordis_projects()
 
+# ---------- STEP 3a: Combine all sources and remove duplicates ----------
+df = pd.concat([rss_df, scopus_df, openaire_df, cordis_df],
+               ignore_index=True)
+df.drop_duplicates(subset=["link", "title"], inplace=True)
+logging.info("Combined sources: %d rows", len(df))
+
 # ---------- Fill missing published dates from URL slug ----------
 
 date_pat = re.compile(r"(\d{4}-\d{2}-\d{2})")     # YYYY-MM-DD
