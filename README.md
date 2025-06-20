@@ -1,105 +1,222 @@
-```markdown
-# Horizon-Scanning Agent 🛰️  
+# Policy Horizon Scanner 🛰️
 
-Python prototype that **automatically scans open sources, enriches them with NLP,
-stores semantic embeddings, and answers policy questions with an LLM**  
-– initially tuned for labour-market and social-policy signals, but easily retargeted.
+*A Python toolkit that continuously harvests labour-market & social-policy signals from open sources, enriches them with NLP, stores semantic embeddings in FAISS, and answers questions through a Retrieval-Augmented Generation (RAG) agent (CLI **and** Streamlit UI).*
 
 ---
 
-## ✨  What it does
+## Table of Contents
 
-| Stage | Purpose | Key libs |
-|-------|---------|----------|
-| **1. Harvest** | Async-download ~60 RSS / API feeds (ECB, Eurostat, NYT, Scopus, OpenAIRE, CORDIS, …) | `httpx`, `feedparser`, `xml.etree`, `tenacity` |
-| **2. Clean & Filter** | De-duplicate, parse dates, keyword-filter “policy” terms | `pandas`, `re` |
-| **3. Enrich** | TF-IDF keywords, recency labels, trend score, **PESTLE** zero-shot tags | `scikit-learn`, `transformers` |
-| **4. Embed & Index** | MiniLM sentence embeddings → **FAISS** vector index (+ metadata parquet) | `sentence-transformers`, `faiss-cpu` |
-| **5. Retrieve** | `faiss_search.py` returns top-*k* docs for a query |  |
-| **6. Answer** | `agent_app.py` feeds snippets + question into OpenAI GPT-4o (or any compatible endpoint) | `openai` |
+1. [Key Capabilities](#key-capabilities)
+2. [Folder Layout](#folder-layout)
+3. [Quick Start](#quick-start)
+4. [Configuration](#configuration)
+5. [Running the Pipeline](#running-the-pipeline)
+6. [Chatting with the Agent](#chatting-with-the-agent)
+7. [Streamlit Dashboard](#streamlit-dashboard)
+8. [Testing](#testing)
+9. [Outputs & Caching](#outputs--caching)
+10. [Extending](#extending)
+11. [Troubleshooting](#troubleshooting)
+12. [License](#license)
 
 ---
 
-## 📦  Folder layout
+## Key Capabilities
 
-```
+| #     | Stage          | What happens                                                                              | Main libs                                     |
+| ----- | -------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------- |
+| **1** | Harvest        | Async-fetch \~60 RSS/APIs (ECB, Eurostat, Scopus, OpenAIRE, CORDIS …)                     | `httpx`, `feedparser`, `tenacity`             |
+| **2** | Clean + Filter | De-dupe, infer dates, keep rows containing policy keywords                                | `pandas`, `re`, `PyYAML`                      |
+| **3** | Enrich         | TF-IDF keywords, recency buckets, trend score, **PESTLE** zero-shot tags (cached to disk) | `scikit-learn`, `transformers`, `disk_cache`  |
+| **4** | Embed + Index  | MiniLM sentence embeddings → **FAISS** vector index                                       | `sentence_transformers`, `faiss-cpu`          |
+| **5** | Retrieve       | `retrieval_backend.snippets()` formats top-*k* snippets for a query                       | `faiss`, `numpy`, `pandas`                    |
+| **6** | Answer         | `agent_app.py` feeds snippets + question to **GPT-4o**                                    | `openai`                                      |
+| **7** | Visualise      | `app_streamlit.py` dashboard: KPIs, preview table, and RAG chat                           | `streamlit`                                   |
+| **8** | Test           | `test_query.py` & `pytest` sanity-check retrieval quality                                 | `pytest`, `tabulate`                          |
 
+---
+
+## Folder Layout
+
+```text
 .
-├── policy\_signal\_scanner\_v3.py   ← main ETL/embedding pipeline
-├── agent\_app.py                  ← chat-style Q\&A loop
-├── retrieval\_backend.py          ← thin helper used by the agent
-├── faiss\_search.py               ← 1-liner wrapper for quick tests
-├── test\_query.py                 ← sanity-check script
-├── sources.yaml                  ← list of RSS / API endpoints
-├── keywords.yaml                 ← editable policy keyword list
-├── cordis-h2020projects.json     ← tiny sample dataset (20 records)
+├── policy_signal_scanner_v3.py       # main ETL / embedding pipeline
+├── retrieval_backend.py              # RAG helper used by the agent & UI
+├── agent_app.py                      # CLI chat loop
+├── app_streamlit.py                  # Streamlit dashboard + chat
+├── faiss_search.py                   # thin wrapper for quick retrieval tests
+├── test_query.py                     # pytest / CLI sanity test
+├── disk_cache.py                     # JSON on-disk memoisation decorator
 ├── requirements.txt
-└── .gitignore
-
+├── sources.yaml                      # RSS / API endpoints
+├── keywords.yaml                     # editable policy keyword list
+├── cordis-h2020projects.json         # tiny sample dataset (optional)
+├── LICENSE                           # MIT
+└── .gitignore                        # ignores *.faiss, *.parquet, combined CSV
 ```
 
-> **Large runtime artefacts** (`*.faiss`, `*.parquet`, `horizon_scanning_combined.csv`) are ignored by Git via `.gitignore`.
+Large artefacts (`*.faiss`, `*.parquet`, `horizon_scanning_combined.csv`) are **not** committed.
 
 ---
 
-## 🚀  Quick start
+## Quick Start
 
 ```bash
-# 1. clone
-git clone https://github.com/<your-user>/horizon-scanning-agent.git
-cd horizon-scanning-agent
+# 1) clone & enter
+git clone https://github.com/<you>/policy-horizon-scanner.git
+cd policy-horizon-scanner
 
-# 2. install deps (ideally inside a virtualenv)
+# 2) create env & install
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# 3. add your secrets
-# create a .env file with
-#   OPENAI_API_KEY=...
-#   SCOPUS_API_KEY=...(optional)
+# 3) provide secrets
+cp example.config2.json config2.json      # add your OpenAI key
+export SCOPUS_API_KEY="your-scopus-key"   # optional but recommended
 
-# 4. run the pipeline  (~3-5 min on CPU)
+# 4) run the pipeline  (~2–5 min on CPU)
 python policy_signal_scanner_v3.py
 
-# 5. chat with the agent
+# 5) chat with the agent
 python agent_app.py
 ```
 
 ---
 
-## ⚙️  Configuration
+## Configuration
 
-| File                          | What you can tweak                                                    |
-| ----------------------------- | --------------------------------------------------------------------- |
-| `sources.yaml`                | Comment / add RSS or API endpoints.                                   |
-| `keywords.yaml`               | Add/remove policy terms to widen or narrow the filter.                |
-| `.env`                        | `OPENAI_API_KEY`, optional `SCOPUS_API_KEY`, model endpoint URL, etc. |
-| `policy_signal_scanner_v3.py` | `ENABLE_SUMMARY`, scoring half-life, batch sizes, etc.                |
+| Item                | Where                                           | Notes                              |
+| ------------------- | ----------------------------------------------- | ---------------------------------- |
+| **OpenAI key**      | `config2.json` (`{"OPENAI_API_KEY": "sk-..."}`) | read by `agent_app.py` & Streamlit |
+| **Scopus key**      | `SCOPUS_API_KEY` env-var (or edit constant)     | used in Stage 1                    |
+| **Feeds**           | `sources.yaml`                                  | add / comment out as needed        |
+| **Policy keywords** | `keywords.yaml`                                 | drives Stage 2 filter              |
+| **Pipeline flags**  | top of `policy_signal_scanner_v3.py`            | e.g. `ENABLE_SUMMARY = True`       |
 
-All YAML and environment variables are loaded at runtime—no code edits required for normal tuning.
+You can also use a `.env` file; `python-dotenv` is in the requirements.
 
 ---
 
-## 🧐  Testing retrieval only
+## Running the Pipeline
 
 ```bash
-python test_query.py "impact of labour mobility on EU policy"
+python policy_signal_scanner_v3.py
 ```
 
-Returns a GitHub-styled table with the five closest documents + distances.
+Outputs
+`horizon_scanning_combined.csv`, `horizon_scanning_meta.parquet`, `horizon_scanning.faiss` appear in the repo root. The default run (≈60 feeds) finishes in **< 5 min on a laptop CPU**.
 
 ---
 
-## 🔒  Responsible & secure use
+## Chatting with the Agent
 
-* Scraper fetches **open, public** sources only and respects polite retry/back-off.
-* Secrets live in **`.env`** and are never committed.
-* Model prompts and top-k snippets are logged to stdout for auditability.
+```bash
+python agent_app.py
+```
+
+**Flow**
+
+```
+user question
+   ↓
+retrieval_backend.snippets()      # embeds query & pulls k-nearest docs
+   ↓
+prompt = context + question
+   ↓
+GPT-4o chat-completion
+   ↓
+console answer
+```
+
+Exit with `quit` / `q`.
 
 ---
 
-## 📝  License
+## Streamlit Dashboard
 
-MIT – see `LICENSE`.
+```bash
+streamlit run app_streamlit.py
+```
+
+* **Overview tab** – KPI cards, source mix bar-chart, preview table.
+* **Ask GPT-4o tab** – same RAG workflow but inside the browser.
+
+> The app checks for `.csv`, `.parquet` and `.faiss` artefacts and will instruct you to run the pipeline first if they’re missing.&#x20;
+
+---
+
+## Testing
+
+```bash
+pytest            # runs test_query.py
+```
+
+Or, ad-hoc:
+
+```bash
+python test_query.py "platform work minimum wage directive"
+```
+
+Returns a GitHub-style table with the five closest documents plus distances.&#x20;
+
+---
+
+## Outputs & Caching
+
+| File/Dir                        | Producer       | Purpose                                    |
+| ------------------------------- | -------------- | ------------------------------------------ |
+| `horizon_scanning_combined.csv` | pipeline       | master table                               |
+| `horizon_scanning_meta.parquet` | pipeline       | same, binary                               |
+| `horizon_scanning.faiss`        | pipeline       | vector index                               |
+| `.cache/`                       | zero-shot step | JSON memoised batches (delete to refresh)  |
+
+---
+
+## Extending
+
+### Swap embedding model
+
+```python
+# in retrieval_backend.py
+from sentence_transformers import SentenceTransformer
+_EMBED_MODEL = SentenceTransformer("all-mpnet-base-v2")
+```
+
+Re-run the pipeline afterwards so embeddings & FAISS match.
+
+### Adjust trend score / keywords
+
+Open `policy_signal_scanner_v3.py` and edit:
+
+```python
+SCOPUS_QUERY = "labour mobility OR ..."
+policy_keywords = yaml.safe_load(open("keywords.yaml"))["policy"]
+```
+
+### Build your own UI
+
+`app_streamlit.py` is 260 lines—fork it or wrap the backend in FastAPI.
+
+---
+
+## Troubleshooting
+
+| Symptom                                                | Fix                                                                             |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| `❌ Retrieval index not found – run the scraper first.` | Execute `policy_signal_scanner_v3.py` before the agent/UI.                      |
+| `Scopus API error 401`                                 | Invalid / expired `SCOPUS_API_KEY`.                                             |
+| CUDA out-of-memory                                     | Set `torch` to CPU or lower batch sizes in Stage 8.                             |
+| Answers don’t reflect new data                         | Delete `.cache/` and rerun zero-shot step, then rebuild FAISS.                  |
+| `faiss.IndexFactoryError`                              | Embedding dimension mismatch – scrape & query must use the **same** model name. |
+
+Set `LOGLEVEL=DEBUG` for verbose logs.
+
+---
+
+## License
+
+Released under the **MIT License** – see `LICENSE`.&#x20;
+Feel free to open issues & PRs.
 
 Dal Borgo R. (2025) Horizon-Scanning Agent, v0.1.*
 
