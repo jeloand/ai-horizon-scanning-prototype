@@ -1,6 +1,8 @@
 # Policy Horizon Scanner 🛰️
 
-*A Python toolkit that continuously harvests labour-market & social-policy signals from open sources, enriches them with NLP, stores semantic embeddings in FAISS, and answers questions through a Retrieval-Augmented Generation (RAG) agent (CLI **and** Streamlit UI).*
+*A Python toolkit that periodically (or on-demand) harvests labour-market & social-policy signals from open sources, enriches them with NLP, stores semantic embeddings in FAISS, and answers questions through a Retrieval-Augmented Generation (RAG) agent (CLI **and** Streamlit UI).*
+
+*Although pre-configured for labour-market and social-policy content, the pipeline is domain-agnostic — swap the keyword list, adjust the API queries, and you’re ready for climate tech, healthcare innovation, or any other topic.*
 
 ---
 
