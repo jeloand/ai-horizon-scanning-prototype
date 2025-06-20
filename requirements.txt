@@ -19,6 +19,9 @@ faiss-cpu>=1.7
 # ───────────────────────── LLM client ─────────────────────────
 openai>=1.25          # GPT-4o via Chat Completions
 
+# ───────────────────────── UI ─────────────────────────
+streamlit>=1.33       # dashboard + RAG chat interface
+
 # ───────────────────────── Utility / CLI ─────────────────────────
 python-dotenv>=1.0    # load .env secrets if you use them
 pyyaml>=6.0
@@ -28,3 +31,6 @@ rich>=13.7            # colourful logs (optional but nice)
 
 # ───────────────────────── Optional local cache helper ─────────────────────────
 diskcache>=5.6        # only if you decide to swap in a heavier cache lib
+
+# ───────────────────────── Dev / tests ─────────────────────────
+pytest>=8.2           # functional sanity test (test_query.py)
