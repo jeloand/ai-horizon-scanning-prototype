@@ -220,6 +220,6 @@ Set `LOGLEVEL=DEBUG` for verbose logs.
 Released under the **MIT License** – see `LICENSE`.&#x20;
 Feel free to open issues & PRs.
 
-Dal Borgo R. (2025) Horizon-Scanning Agent, v0.1.*
+Dal Borgo R. (2025) AI-Powered Horizon-Scanning Pipeline, v0.1.*
 
 ```
