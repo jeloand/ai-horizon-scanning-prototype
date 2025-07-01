@@ -1,27 +1,28 @@
-# ────────────────── secrets / user-specific config ──────────────────
+# ---- Python artefacts ----
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+.venv/
 .env
-config*.json          # e.g. config2.json with your API keys
 
-# ────────────────── large runtime artefacts ─────────────────────────
+# ---- large generated files ----
 *.faiss
 *.parquet
 horizon_scanning_combined.csv
-.cache/               # on-disk memoisation files
-*.pkl                 # any pickled models
+.cache/
+current_profile.txt
 
-# ────────────────── Python byte-code & build trash ───────────────────
-__pycache__/
-*.py[cod]
-*.pyo
-*.so                  # C-extensions if you ever compile one
-*.egg-info/
-dist/
-build/
+# ---- secrets / local config ----
+config.json
+config2.json
 
-# ────────────────── notebooks / editors / OS cruft (optional) ───────
+# ---- Jupyter / notebooks ----
 .ipynb_checkpoints/
-.vscode/
-.idea/
+notebooks/__pycache__/
+*.ipynb
+
+# ---- OS / editor junk ----
 .DS_Store
 Thumbs.db
-
+*.swp
