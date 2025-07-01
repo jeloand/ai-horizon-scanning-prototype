@@ -1,0 +1,4 @@
+// config/config2.sample.json
+{
+  "OPENAI_API_KEY": "sk-replace-me"
+}
