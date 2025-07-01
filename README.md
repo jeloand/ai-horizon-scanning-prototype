@@ -1,4 +1,3 @@
-````markdown
 # Policy Horizon Scanner 🛰️
 
 *A Python toolkit that periodically (or on-demand) harvests labour-market & social-policy signals from open sources, enriches them with NLP, stores semantic embeddings in FAISS, and answers questions through a Retrieval-Augmented Generation (RAG) agent (CLI **and** Streamlit UI).*
@@ -70,8 +69,8 @@
 │   └── agent_app.py                   # CLI chat loop
 │
 ├── streamlit/
-│   ├── app_streamlit.py               # **full-featured dashboard** – multi-tab UI: KPIs, chat, review, weak signals
-│   └── dashboard.py                   # **lite dashboard** – single-page KPI/quick-peek view
+├── app_streamlit.py   # **full-featured dashboard** – multi-tab UI: KPIs, chat, review, weak signals
+└── dashboard.py       # **lite dashboard** – single-page KPI/quick-peek view
 │
 ├── tools/
 │   ├── inspect_parquet.py
@@ -221,4 +220,5 @@ Set `LOGLEVEL=DEBUG` for verbose logs.
 Released under the **MIT License** – see `LICENSE`.
 Feel free to open issues & PRs.
 
+```
 Dal Borgo, R. (2025) AI-Powered Horizon-Scanning Pipeline, v0.1.*
