@@ -16,13 +16,38 @@ current_profile.txt
 # ---- secrets / local config ----
 config.json
 config2.json
+config.yaml
+config/*.yaml          # catch per-env secrets
+!config/*.sample.*     # but keep template files in the repo
 
-# ---- Jupyter / notebooks ----
+# ---- test / tooling caches ----
+.pytest_cache/
+.mypy_cache/
+.coverage
+
+# ---- packaging ----
+build/
+dist/
+*.egg-info/
+
+# ---- IDE / editor junk ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# ---- Streamlit / app cache ----
+.streamlit/
+
+# ---- notebooks ----
 .ipynb_checkpoints/
 notebooks/__pycache__/
 *.ipynb
 
-# ---- OS / editor junk ----
-.DS_Store
-Thumbs.db
-*.swp
+# ---- misc logs & tmp ----
+*.log
+*.tmp
+
+# ---- (optional) data dumps ----
+data/
