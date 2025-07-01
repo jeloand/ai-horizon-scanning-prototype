@@ -1,39 +1,45 @@
 # ─────────────── Core data / HTTP ───────────────
 pandas>=2.2
-feedparser>=6.0          # robust RSS parsing
-httpx[http2]>=0.28       # async HTTP client
-tenacity>=8.2            # retry/back-off wrappers
-pydantic>=2.9            # required by httpx for strict types
+pyarrow>=15.0              # Parquet backend
+feedparser>=6.0            # robust RSS parsing
+httpx[http2]>=0.28         # async HTTP client
+tenacity>=8.2              # retry/back-off wrappers
+python-dateutil>=2.9       # date parsing utilities
 
 # ─────────────── NLP / ML ───────────────
-scikit-learn>=1.4        # TF-IDF + misc utilities
-transformers>=4.41       # HuggingFace pipelines
+numpy>=1.26                # base array lib (explicit for slim images)
+scikit-learn>=1.4          # TF-IDF + misc utilities
+joblib>=1.3                # parallel cache (imported in pipeline)
+transformers>=4.41
 sentence-transformers>=2.7
-spacy>=3.7               # stakeholder NER
-spacy-transformers>=1.3  # transformer-based NER pipeline
-torch>=2.2.0+cpu ; platform_system!="Linux" or platform_machine=="x86_64"
-torch>=2.2.0      ; platform_system=="Linux" and platform_machine!="x86_64"
-# ↑ swap the CPU wheel for +cu118 etc. if you have CUDA
+sentencepiece>=0.2         # tokenizer for many HF models
+spacy>=3.7                 # stakeholder NER
+spacy-transformers>=1.3    # transformer-based NER pipeline
+torch==2.2.0+cpu      ; platform_system!="Linux" or platform_machine=="x86_64"
+torch==2.2.0         ; platform_system=="Linux"  and platform_machine!="x86_64"
+# ↑ GPU users: replace with  `torch==2.2.0+cu118` (or your CUDA wheel)
 
 # ─────────────── Vector store ───────────────
 faiss-cpu>=1.7
 
 # ─────────────── LLM client ───────────────
-openai>=1.25             # GPT-4o api
+openai>=1.25               # GPT-4o API
 
 # ─────────────── Streamlit UI ───────────────
 streamlit>=1.37
-rich>=13.7               # colourful logging (optional)
+rich>=13.7                 # colourful logs (optional)
 
 # ─────────────── Utility & caching ───────────────
 python-dotenv>=1.0
 pyyaml>=6.0
 tqdm>=4.66
-diskcache>=5.6           # used by disk_cache.py decorator
-tabulate>=0.9            # pretty CLI tables
-pytest>=8.0              # test suite
+diskcache>=5.6             # decorator-based memo cache
+tabulate>=0.9              # pretty CLI tables
+
+# ─────────────── Testing ───────────────
+pytest>=8.0
 
 # ─────────────── (optional) scenario notebook ───────────────
-# hdbscan>=0.8          # clustering - requires MS C++ Build Tools on Windows
+# hdbscan>=0.8            # clustering (requires C++ build tools on Windows)
 # umap-learn>=0.5
 # notebook>=7.4
