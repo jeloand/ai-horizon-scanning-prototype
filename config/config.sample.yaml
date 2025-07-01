@@ -1,0 +1,3 @@
+# config/config.sample.yaml
+SCOPUS_API_KEY: "replace-me"
+OPENAIRE_EMAIL: "your@email"
