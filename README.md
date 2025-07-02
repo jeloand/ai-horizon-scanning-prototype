@@ -112,13 +112,13 @@ python scripts/agent_app.py
 
 ## Configuration
 
-| Item                            | File                                                 | Notes                               |
-| ------------------------------- | ---------------------------------------------------- | ----------------------------------- |
+| Item                            | File                                                 | Notes |
+| ------------------------------- | ---------------------------------------------------- | ----- |
 | **Profiles (feeds + keywords)** | `profiles/*.yml`                                     | `global.yml` ships with 40 + feeds. |
-| **OpenAI key**                  | `config/config2.json` → `{"OPENAI_API_KEY": "sk-…"}` | required for agent & Streamlit      |
-| **Scopus key**                  | `config/config.yaml` → `SCOPUS_API_KEY: "…" `        | optional but recommended            |
-| **Pipeline flags**              | top of `scripts/policy_signal_scanner_v3.py`         | e.g. `ENABLE_SUMMARY = True`        |
-| **Cache TTL**                   | call in `disk_cache.clean_cache()`                   | change `max_age_days` value         |
+| **OpenAI key**                  | `config/config2.json` → `{"OPENAI_API_KEY": "sk-…"}` | Required for agent & Streamlit |
+| **Scopus key**                  | `config/config.yaml` → `SCOPUS_API_KEY: "…"`         | Free for **non-commercial academic / public-sector use**. Commercial users must obtain a paid licence via <https://dev.elsevier.com/>. |
+| **Pipeline flags**              | Top of `scripts/policy_signal_scanner_v3.py`         | e.g. `ENABLE_SUMMARY = True` |
+| **Cache TTL**                   | Call in `disk_cache.clean_cache()`                   | Adjust `max_age_days` value |
 
 ---
 
@@ -203,12 +203,12 @@ Wrap `retrieval_backend` in FastAPI or fork the Streamlit app.
 
 ## Troubleshooting
 
-| Symptom                         | Fix                                                           |
-| ------------------------------- | ------------------------------------------------------------- |
-| **“Retrieval index not found”** | Run the scraper first.                                        |
-| **Scopus 401**                  | Invalid/expired `SCOPUS_API_KEY`.                             |
-| **CUDA OOM**                    | Set `TORCH_FORCE_GPU=0` or lower batch size.                  |
-| **faiss.IndexFactoryError**     | Embed model changed → rebuild index.                          |
+| Symptom                         | Fix |
+| ------------------------------- | --- |
+| **“Retrieval index not found”** | Run the scraper first. |
+| **Scopus 401 / 403**           | Key exceeded Elsevier quota or your licence doesn’t cover this use case (see API policy). |
+| **CUDA OOM**                    | Set `TORCH_FORCE_GPU=0` or lower batch size. |
+| **faiss.IndexFactoryError**     | Embedding model changed → rebuild index. |
 | **Stale answers**               | `rm -r .cache && python scripts/policy_signal_scanner_v3.py`. |
 
 Set `LOGLEVEL=DEBUG` for verbose logs.
