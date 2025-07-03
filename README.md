@@ -153,6 +153,15 @@ streamlit run streamlit/app_streamlit.py
 *Overview | Ask GPT-4o | Analyst Review | Weak Signals* tabs appear.
 If data/index files are missing, the app prompts you to run the scraper first.
 
+What you’ll see:
+| Tab | Purpose | Key controls |
+| --- | --- | --- |
+| **Overview** | High-level metrics (total docs, sources, weak-signal count), bar chart of top sources, profile name & timestamp. | Date-range picker · Profile selector |
+| **Ask GPT-4o** | RAG chat UI powered by the FAISS index. | Question box · *Include weak signals* toggle · Snippets-k slider |
+| **Weak Signals Explorer** | Inspect items flagged “rare”. | Rarity slider · PESTLE tag multi-select · CSV download |
+| **Analyst Review Queue** | Human moderation: approve ✓ / reject ✗ suggested items. | Bulk approve/reject checkbox · Saves to `review_items.parquet` |
+| **Raw Data** *(expander)* | Full combined CSV for power users. | Column filters · Export button |
+
 ---
 
 ## Testing
