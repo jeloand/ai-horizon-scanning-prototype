@@ -12,7 +12,7 @@
 3. [Quick Start](#quick-start)  
 4. [Configuration](#configuration)  
 5. [Running the Pipeline](#running-the-pipeline)  
-6. [Chatting with the Agent](#chatting-with-the-agent)  
+6. [Chat Interface (CLI)](#chat-interface-cli)  
 7. [Streamlit Dashboard](#streamlit-dashboard)  
 8. [Testing](#testing)  
 9. [Outputs & Caching](#outputs--caching)  
@@ -133,7 +133,7 @@ Outputs land in repo root (`*.csv`, `*.parquet`, `*.faiss`).
 
 ---
 
-## Chatting with the Agent
+## Chat Interface (CLI)
 
 ```bash
 python scripts/agent_app.py
