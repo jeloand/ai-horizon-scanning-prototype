@@ -1,10 +1,15 @@
 # retrieval_backend.py
 # --------------------------------------------------------------
-import faiss, numpy as np, pandas as pd
+import sys
 from pathlib import Path
-from embed_loader import get_embedder     # 🠔 singleton embedding loader
 
-BASE_DIR   = Path(__file__).resolve().parent
+# Add src directory to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+import faiss, numpy as np, pandas as pd
+from horizon_scanner.embed_loader import get_embedder     # 🠔 singleton embedding loader
+
+BASE_DIR   = Path(__file__).resolve().parent.parent  # Go up to project root
 _VECTORS   = BASE_DIR / "horizon_scanning.faiss"
 _META      = BASE_DIR / "horizon_scanning_meta.parquet"
 
