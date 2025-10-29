@@ -145,7 +145,8 @@ async def gather_sources(                       # noqa: D401 – simple descript
     """Download all sources concurrently and return three DataFrames."""
     import pandas as pd  # local import to keep fetchers lightweight
 
-    async with httpx.AsyncClient() as session:
+    # Disable SSL verification to handle self-signed certificates
+    async with httpx.AsyncClient(verify=False) as session:
         rss_tasks = [
             fetch_rss(session, name, url)
             for name, url in rss_sources.items()
