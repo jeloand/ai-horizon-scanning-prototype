@@ -3,6 +3,10 @@ from datetime import datetime
 from pathlib import Path
 from dateutil import parser as dparse
 
+# Add src directory to Python path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
 import httpx, feedparser, xml.etree.ElementTree as ET
 import pandas as pd
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -10,7 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from transformers import pipeline, Pipeline
 import torch, numpy as np
 from joblib import dump, load
-from disk_cache import disk_memoize
+from horizon_scanner.disk_cache import disk_memoize
 from horizon_scanner.fetchers import gather_sources
 from horizon_scanner.features import robust_date, trend_score_vectorised
 
@@ -219,7 +223,7 @@ async def main(enable_summary: bool, output_file: str, profile_name: str) -> Non
     cordis_df = load_cordis_projects()
 
     # ---------- STEP 3b: Combine all sources and remove duplicates ----------
-    from stakeholder_ner import add_stakeholder_column
+    from horizon_scanner.stakeholder_ner import add_stakeholder_column
 
     df = pd.concat([rss_df, scopus_df, openaire_df, cordis_df],
                    ignore_index=True)
@@ -524,13 +528,14 @@ async def main(enable_summary: bool, output_file: str, profile_name: str) -> Non
 
     # 2️⃣  build the list of texts to embed
     texts = (
-        df["summary"].replace("", np.nan)   # prefer summary when available
-          .fillna(df["description"])
+        df["summary"].fillna("")   # fill empty strings with empty string
+          .replace("", np.nan)     # then convert empty strings to NaN
+          .fillna(df["description"])  # fallback to description
           .tolist()
     )
 
     # 3️⃣  encode
-    from embed_loader import get_embedder
+    from horizon_scanner.embed_loader import get_embedder
     import faiss, numpy as np
 
     embed_model = get_embedder()
