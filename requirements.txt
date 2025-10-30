@@ -22,6 +22,7 @@ torch>=2.0.0 --index-url https://download.pytorch.org/whl/cpu  # Use CPU-only Py
 faiss-cpu>=1.7
 
 # ─────────────── LLM client ───────────────
+openai>=1.0                # OpenAI API
 google-generativeai>=0.3.0  # Gemini API
 
 # ─────────────── Streamlit UI ───────────────

@@ -15,6 +15,10 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the source package and install it
+COPY src/ ./src/
+RUN pip install -e ./src
+
 # Download spaCy model (required for stakeholder NER)
 RUN python -m spacy download en_core_web_sm
 
