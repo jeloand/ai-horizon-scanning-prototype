@@ -2,6 +2,10 @@ import os, re, json, yaml, math, logging, asyncio, argparse
 from datetime import datetime
 from pathlib import Path
 from dateutil import parser as dparse
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Add src directory to Python path
 import sys
@@ -95,23 +99,29 @@ async def main(enable_summary: bool, output_file: str, profile_name: str) -> Non
     clean_cache(".cache", max_age_days=7)
 
     # ------------------------------------------------------------------
-    # 1. Secrets / API keys (config.json)
+    # 1. Secrets / API keys (config.json with env variable fallback)
     # ------------------------------------------------------------------
-    try:
-        with open("config.json", encoding="utf-8") as f:
-            _cfg = json.load(f)
-        SCOPUS_API_KEY = _cfg.get("SCOPUS_API_KEY", "")
-    except FileNotFoundError:
-        SCOPUS_API_KEY = ""
+    
+    # Try environment variable first, then fall back to config.json
+    SCOPUS_API_KEY = os.getenv("SCOPUS_API_KEY")
+    
+    if not SCOPUS_API_KEY:
+        # Fallback to config.json for local development
+        try:
+            with open("config.json", encoding="utf-8") as f:
+                _cfg = json.load(f)
+            SCOPUS_API_KEY = _cfg.get("SCOPUS_API_KEY", "")
+        except FileNotFoundError:
+            SCOPUS_API_KEY = ""
 
     if not SCOPUS_API_KEY:
         raise SystemExit(
-            "❌  SCOPUS_API_KEY is missing. Put it in config.json "
+            "❌  SCOPUS_API_KEY is missing. Set as environment variable or add to config.json "
             'e.g. {"SCOPUS_API_KEY": "your-key"}'
         )
 
     # ------------------------------------------------------------------
-    # 1b.  Tuning constants (config.yaml)
+    # 1b.  Tuning constants (config.yaml with env variable support)
     # ------------------------------------------------------------------
     try:
         with open("config.yaml", encoding="utf-8") as fh:
@@ -127,11 +137,11 @@ async def main(enable_summary: bool, output_file: str, profile_name: str) -> Non
             "  openaire: 10"
         )
 
-    # pull values from YAML
-    SCOPUS_QUERY         = cfg_yaml["queries"]["scopus"]
-    OPENAIRE_QUERY       = cfg_yaml["queries"]["openaire"]
-    SCOPUS_COUNT         = cfg_yaml["limits"]["scopus"]
-    OPENAIRE_MAX_RESULTS = cfg_yaml["limits"]["openaire"]
+    # pull values from YAML (with env variable overrides)
+    SCOPUS_QUERY         = os.getenv("SCOPUS_QUERY", cfg_yaml["queries"]["scopus"])
+    OPENAIRE_QUERY       = os.getenv("OPENAIRE_QUERY", cfg_yaml["queries"]["openaire"])
+    SCOPUS_COUNT         = int(os.getenv("SCOPUS_COUNT", cfg_yaml["limits"]["scopus"]))
+    OPENAIRE_MAX_RESULTS = int(os.getenv("OPENAIRE_MAX_RESULTS", cfg_yaml["limits"]["openaire"]))
 
     # NEW — optional extras (use .get so it's not mandatory)
     EXTRA_KW       = cfg_yaml.get("focus_keywords", [])
