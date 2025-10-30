@@ -1,0 +1,46 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# KEEP these data files for Docker image:
+# *.csv
+# *.parquet
+# *.faiss
+
+# Test files
+tests/
+*.test.py
+
+# Documentation
+*.md
+LICENSE
+
+# Config samples
+config/*.sample.*
