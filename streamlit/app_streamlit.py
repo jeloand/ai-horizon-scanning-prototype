@@ -10,12 +10,17 @@ Streamlit dashboard + chat front-end for the Horizon-Scanning prototype
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 from datetime import datetime
 
+# Add scripts directory to Python path
+SCRIPTS_DIR = Path(__file__).parent.parent / "scripts"
+sys.path.insert(0, str(SCRIPTS_DIR))
+
 import pandas as pd
 import streamlit as st
-import review_utils
+from horizon_scanner import review_utils
 
 # project-internal helpers ------------------------------------------------
 from retrieval_backend import snippets, ready as index_ready          # vector search
