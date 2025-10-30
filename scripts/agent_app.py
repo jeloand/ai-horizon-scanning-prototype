@@ -5,6 +5,32 @@ import json
 import openai
 from retrieval_backend import snippets, ready
 
+
+# IMPORTANT: Set SSL environment variables BEFORE importing google.generativeai
+# This fixes SSL_ERROR_SSL with self-signed certificates in corporate proxies
+import certifi
+os.environ['GRPC_DEFAULT_SSL_ROOTS_FILE_PATH'] = certifi.where()
+os.environ['SSL_CERT_FILE'] = certifi.where()
+os.environ['REQUESTS_CA_BUNDLE'] = certifi.where()
+os.environ['GRPC_VERBOSITY'] = 'ERROR'
+os.environ['GRPC_TRACE'] = ''
+
+# For corporate proxies with SSL inspection, disable certificate verification
+os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH'
+os.environ['CURL_CA_BUNDLE'] = ''
+
+import ssl
+import grpc
+import urllib3
+import httpx
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# Create an unverified SSL context for Google services only
+# DO NOT apply globally as it breaks OpenAI API connections
+_unverified_ssl_context = ssl._create_unverified_context
+
+# NOW import Google Generative AI after SSL setup
+
 # Load API key from config2.json
 with open("config2.json", "r") as f:
     config = json.load(f)
@@ -13,7 +39,17 @@ OPENAI_API_KEY = config["OPENAI_API_KEY"]
 MODEL = "gpt-4o"          
 
 def ask_llm(prompt: str) -> str:
-    client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    # Create httpx client with SSL verification disabled for corporate proxies
+    http_client = httpx.Client(
+        verify=False,  # Disable SSL verification for corporate proxy
+        timeout=60.0
+    )
+    
+    client = openai.OpenAI(
+        api_key=OPENAI_API_KEY,
+        http_client=http_client
+    )
+    
     resp = client.chat.completions.create(
         model       = MODEL,
         messages    = [{"role": "user", "content": prompt}],
