@@ -5,6 +5,7 @@ feedparser>=6.0            # robust RSS parsing
 httpx[http2]>=0.28         # async HTTP client
 tenacity>=8.2              # retry/back-off wrappers
 python-dateutil>=2.9       # date parsing utilities
+certifi>=2023.7.22         # SSL certificate bundle for HTTPS requests
 
 # ─────────────── NLP / ML ───────────────
 numpy>=1.26                # base array lib (explicit for slim images)
@@ -15,15 +16,14 @@ sentence-transformers>=2.7
 sentencepiece>=0.2         # tokenizer for many HF models
 spacy>=3.7                 # stakeholder NER
 spacy-transformers>=1.3    # transformer-based NER pipeline
-torch==2.2.0+cpu      ; platform_system!="Linux" or platform_machine=="x86_64"
-torch==2.2.0         ; platform_system=="Linux"  and platform_machine!="x86_64"
+torch>=2.0.0               # PyTorch (compatible with all platforms including macOS ARM64)
 # ↑ GPU users: replace with  `torch==2.2.0+cu118` (or your CUDA wheel)
 
 # ─────────────── Vector store ───────────────
 faiss-cpu>=1.7
 
 # ─────────────── LLM client ───────────────
-openai>=1.25               # GPT-4o API
+google-generativeai>=0.3.0  # Gemini API
 
 # ─────────────── Streamlit UI ───────────────
 streamlit>=1.37
