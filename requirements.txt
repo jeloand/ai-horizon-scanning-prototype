@@ -15,9 +15,8 @@ transformers>=4.41
 sentence-transformers>=2.7
 sentencepiece>=0.2         # tokenizer for many HF models
 spacy>=3.7                 # stakeholder NER
-spacy-transformers>=1.3    # transformer-based NER pipeline
-torch>=2.0.0               # PyTorch (compatible with all platforms including macOS ARM64)
-# ↑ GPU users: replace with  `torch==2.2.0+cu118` (or your CUDA wheel)
+# Removed spacy-transformers to reduce build time - use standard spaCy models instead
+torch>=2.0.0 --index-url https://download.pytorch.org/whl/cpu  # Use CPU-only PyTorch for faster install
 
 # ─────────────── Vector store ───────────────
 faiss-cpu>=1.7

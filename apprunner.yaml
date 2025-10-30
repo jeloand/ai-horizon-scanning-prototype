@@ -1,22 +1,11 @@
 version: 1.0
-runtime: python3
+runtime: docker
+
 build:
-  commands:
-    pre-build:
-      - echo "Starting pre-build phase..."
-      - python --version
-      - pip --version
-    build:
-      - echo "Installing Python dependencies..."
-      - pip install --upgrade pip
-      - pip install --no-cache-dir -r requirements.txt
-    post-build:
-      - echo "Downloading spaCy model..."
-      - python -m spacy download en_core_web_sm
-      - echo "Build completed successfully"
+  dockerfile: Dockerfile
+  context: .
+
 run:
-  runtime-version: "3.11"
-  command: streamlit run streamlit/app_streamlit.py --server.port=8501 --server.address=0.0.0.0
   network:
     port: 8501
     env: APP_PORT
