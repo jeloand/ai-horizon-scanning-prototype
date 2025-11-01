@@ -7,9 +7,6 @@ __pycache__/
 .env
 
 # ---- large generated files ----
-*.faiss
-*.parquet
-horizon_scanning_combined.csv
 .cache/
 current_profile.txt
 
